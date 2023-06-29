@@ -1,15 +1,13 @@
 import serial
 import serial.tools.list_ports
-# pip install pyserial
+import time
 
 # Specify the device name to search for
-device_name = 'CP2102 USB to UART Bridge Controller'
+device_name = 'Silicon Labs CP210x USB to UART Bridge'
 
 # Find the port number for the device
 ports = serial.tools.list_ports.comports()
 port_number = None
-print("Hi")
-print(serial.tools.list_ports.grep(1).send(b'HI'))
 for port in ports:
     if device_name in port.description:
         port_number = port.device
@@ -20,16 +18,27 @@ if port_number is None:
     exit()
 
 # Configure the serial connection
-baud_rate = 9600  # Adjust to match your telemetry module's baud rate
+baud_rate = 57600  # Adjust to match your telemetry module's baud rate
 
 # Open the serial connection
 ser = serial.Serial(port_number, baud_rate)
 
-# Send and receive data as before
-data_to_send = b'Hello, World!'
-ser.write(data_to_send)
-received_data = ser.read(10)
-print(received_data)
+# Wait for user input to start sending data
+while True:
+    s = input("Enter start code: ")
+    if s == "start":
+        break
+
+# Send and receive data
+while True:
+    data_to_send = b'fire'
+    #ser.write(data_to_send)
+    ser.writelines(data_to_send)
+    print("Data sent:", data_to_send)
+    time.sleep(1)
+
+    #received_data = ser.readline()
+    #print("Received data:", received_data.decode())
 
 # Close the serial connection
 ser.close()

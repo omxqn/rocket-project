@@ -2,11 +2,17 @@ import random
 import sys
 import time
 import threading
+
+from PyQt5.QtGui import QPainter
+from PyQt5.QtWidgets import *
 from ui import Ui_MainWindow
+from PyQt5.QtCore import *
 from PyQt5.Qt import *
 from password_manager import PasswordDialog
 # pip install PyQtChart
 from cryption import *
+from PyQt5 import *
+
 
 # pip install PyQtChart
 data = {"speed": 0, "altitude": 0, "pressure": 0, "location": {"log": "0", "lat": "0"}}
@@ -14,11 +20,11 @@ data = {"speed": 0, "altitude": 0, "pressure": 0, "location": {"log": "0", "lat"
 
 def refresh():
     print("Updating")
-    data["speed"] = random.randint(10, 2000)
-    data["altitude"] = random.randint(10, 2000)
+    data["speed"] = random.randint(90, 150)
+    data["altitude"] = random.randint(10, 150)
     data["pressure"] = random.randint(10, 2000)
-    data["location"]["long"] = str(random.randint(10, 2000))
-    data["location"]["lat"] = str(random.randint(10, 2000))
+    data["location"]["long"] = str(random.randint(0, 90))
+    data["location"]["lat"] = str(random.randint(0, 90))
 
 
 class MyForm(QMainWindow):
@@ -194,6 +200,30 @@ class MyForm(QMainWindow):
         series.append(4, 4)
         series.append(5, 5)
 
+        # Create a QLineSeries and add some data
+        series2 = QLineSeries()
+        series2.append(0, 6)
+        series2.append(2, 4)
+        series2.append(3, 8)
+        series2.append(4, 4)
+        series2.append(5, 5)
+
+        # Create a QLineSeries and add some data
+        series3 = QLineSeries()
+        series3.append(0, 6)
+        series3.append(2, 4)
+        series3.append(3, 8)
+        series3.append(4, 4)
+        series3.append(5, 5)
+
+        # Create a QLineSeries and add some data
+        series4 = QLineSeries()
+        series4.append(0, 6)
+        series4.append(2, 4)
+        series4.append(3, 8)
+        series4.append(4, 4)
+        series4.append(5, 5)
+
         # Create a QChart and add the series to it
         chart = QChart()
         chart.addSeries(series)
@@ -201,40 +231,126 @@ class MyForm(QMainWindow):
         chart.setMargins(QMargins(0, 0, 0, 0))
         chart.legend().hide()
 
+        # Create a QChart and add the series to it
+        chart2 = QChart()
+        chart2.addSeries(series2)
+        chart2.createDefaultAxes()
+        chart2.setMargins(QMargins(0, 0, 0, 0))
+        chart2.legend().hide()
+
+        # Create a QChart and add the series to it
+        chart3 = QChart()
+        chart3.addSeries(series3)
+        chart3.createDefaultAxes()
+        chart3.setMargins(QMargins(0, 0, 0, 0))
+        chart3.legend().hide()
+
+        # Create a QChart and add the series to it
+        chart4 = QChart()
+        chart4.addSeries(series4)
+        chart4.createDefaultAxes()
+        chart4.setMargins(QMargins(0, 0, 0, 0))
+        chart4.legend().hide()
+
         # Create a QChartView and set the chart as its model
         chart_view = QChartView(chart)
         chart_view.setRenderHint(QPainter.Antialiasing)
         chart_view.setFocusPolicy(Qt.NoFocus)
         chart_view.setFrameStyle(QFrame.NoFrame)
+        chart_view.setFixedSize(190, 140)
+
+        # Create a QChartView and set the chart as its model
+        chart_view2 = QChartView(chart2)
+        chart_view2.setRenderHint(QPainter.Antialiasing)
+        chart_view2.setFocusPolicy(Qt.NoFocus)
+        chart_view2.setFrameStyle(QFrame.NoFrame)
+        chart_view2.setFixedSize(190, 140)
+
+
+        # Create a QChartView and set the chart as its model
+        chart_view3 = QChartView(chart3)
+        chart_view3.setRenderHint(QPainter.Antialiasing)
+        chart_view3.setFocusPolicy(Qt.NoFocus)
+        chart_view3.setFrameStyle(QFrame.NoFrame)
+        chart_view3.setFixedSize(190, 140)
+
+
+        # Create a QChartView and set the chart as its model
+        chart_view4 = QChartView(chart4)
+        chart_view4.setRenderHint(QPainter.Antialiasing)
+        chart_view4.setFocusPolicy(Qt.NoFocus)
+        chart_view4.setFrameStyle(QFrame.NoFrame)
+        chart_view4.setFixedSize(190, 140)
+
+
+
+
         # Create a QVBoxLayout and add the chart view to it
         layout = QVBoxLayout()
         layout.addWidget(chart_view)
-        chart_view.setFixedSize(190, 140)
+        layout.addWidget(chart_view2)
+        layout.addWidget(chart_view3)
+        layout.addWidget(chart_view4)
+
+        # Set the layout on the central widget
+        central_widget = self.ui.centralwidget
+        central_widget.setLayout(layout)
+        self.setCentralWidget(central_widget)
+
+        chart_view.setParent(self)
+        chart_view.move(10,70)
+
+        chart_view2.setParent(self)
+        chart_view2.move(200, 70)
+
+        chart_view3.setParent(self)
+        chart_view3.move(10, 200)
+
+        chart_view4.setParent(self)
+        chart_view4.move(200, 200)
+
+
+        #layout.removeWidget(chart_view)
+        #chart_view.unsetLayoutDirection()
+        #chart_view.move(50,50)
         self.ui.status.setLayout(layout)
 
+        #chart_view.setGeometry(QRect(190, 140, 121, 81))
         def update_chart():
             # Generate a random y value
             y = random.randint(1, 50)
 
             # Append the new data to the series
             series.append(series.count(), y)
-            print(series.count(), y)
+            series2.append(series2.count(), y)
+            series3.append(series3.count(), y)
+            series4.append(series4.count(), y)
+
 
             if int(series.count()) < 10:
                 return
 
             # Shift the x-axis of the chart
             chart.axisX().setRange(series.count()-10,series.count())
+            chart2.axisX().setRange(series2.count() - 10, series2.count())
+            chart3.axisX().setRange(series3.count() - 10, series3.count())
+            chart4.axisX().setRange(series4.count() - 10, series4.count())
 
             # Set the range of the y-axis to the minimum and maximum values of the y-values in the series
             y_values = [point.y() for point in series.pointsVector()]
             chart.axisY().setRange(min(y_values), max(y_values))
-
+            chart2.axisY().setRange(min(y_values), max(y_values))
+            chart3.axisY().setRange(min(y_values), max(y_values))
+            chart4.axisY().setRange(min(y_values), max(y_values))
             # Resize the chart to fit in the chart view
             # chart.setFixedSize(chart_view.size())
 
             # Redraw the chart
             chart_view.repaint()
+            chart_view2.repaint()
+            chart_view3.repaint()
+            chart_view4.repaint()
+
 
         # Create a QTimer to update the chart every second
         timer = QTimer(self)
