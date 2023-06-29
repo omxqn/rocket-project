@@ -20,9 +20,9 @@ data = {"speed": 0, "altitude": 0, "pressure": 0, "location": {"log": "0", "lat"
 
 def refresh():
     print("Updating")
-    data["speed"] = random.randint(90, 150)
-    data["altitude"] = random.randint(10, 150)
-    data["pressure"] = random.randint(10, 2000)
+    data["speed"] = random.randint(150, 300)
+    data["altitude"] = random.randint(100, 150)
+    data["pressure"] = random.randint(1000, 2000)
     data["location"]["long"] = str(random.randint(0, 90))
     data["location"]["lat"] = str(random.randint(0, 90))
 
@@ -317,14 +317,22 @@ class MyForm(QMainWindow):
 
         #chart_view.setGeometry(QRect(190, 140, 121, 81))
         def update_chart():
+            speed = data["speed"]  # Update the self.speed with the latest data value
+            altitude = data["altitude"]
+            pressure = data["pressure"]
+            tempreture = random.randint(29,80)
+
+
             # Generate a random y value
             y = random.randint(1, 50)
-
+            y1 = random.randint(1, 50)
+            y2 = random.randint(1, 50)
+            y3 = random.randint(1, 50)
             # Append the new data to the series
-            series.append(series.count(), y)
-            series2.append(series2.count(), y)
-            series3.append(series3.count(), y)
-            series4.append(series4.count(), y)
+            series.append(series.count(), speed)
+            series2.append(series2.count(), altitude)
+            series3.append(series3.count(), pressure)
+            series4.append(series4.count(), tempreture)
 
 
             if int(series.count()) < 10:
@@ -338,10 +346,13 @@ class MyForm(QMainWindow):
 
             # Set the range of the y-axis to the minimum and maximum values of the y-values in the series
             y_values = [point.y() for point in series.pointsVector()]
+            y_values2 = [point.y() for point in series2.pointsVector()]
+            y_values3 = [point.y() for point in series3.pointsVector()]
+            y_values4 = [point.y() for point in series4.pointsVector()]
             chart.axisY().setRange(min(y_values), max(y_values))
-            chart2.axisY().setRange(min(y_values), max(y_values))
-            chart3.axisY().setRange(min(y_values), max(y_values))
-            chart4.axisY().setRange(min(y_values), max(y_values))
+            chart2.axisY().setRange(min(y_values2), max(y_values2))
+            chart3.axisY().setRange(min(y_values3), max(y_values3))
+            chart4.axisY().setRange(min(y_values4), max(y_values4))
             # Resize the chart to fit in the chart view
             # chart.setFixedSize(chart_view.size())
 
